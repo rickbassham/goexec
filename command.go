@@ -25,6 +25,7 @@ func (ExecCommand) Command(name string, args ...string) Command {
 type Command interface {
 	Start() error
 	Wait() error
+	Kill() error
 	Signal(os.Signal) error
 	Stdout() (<-chan string, error)
 	Stderr() (<-chan string, error)
@@ -42,6 +43,10 @@ func (c *cmd) Start() error {
 
 func (c *cmd) Wait() error {
 	return c.c.Wait()
+}
+
+func (c *cmd) Kill() error {
+	return c.c.Process.Kill()
 }
 
 func (c *cmd) Signal(s os.Signal) error {
